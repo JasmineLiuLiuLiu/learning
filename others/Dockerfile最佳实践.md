@@ -73,21 +73,7 @@ EOF
 
 ### 用多阶段构建
 
-在Docker 17.05以上版本中，你可以使用多阶段构建来减少所构建镜像的大小。
-
-```bash
-FROM golang:1.7.3
-WORKDIR /go/src/github.com/alexellis/href-counter/
-RUN go get -d -v golang.org/x/net/html  
-COPY app.go .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
-
-FROM alpine:latest  
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=0 /go/src/github.com/alexellis/href-counter/app . # COPY --from=0将前一阶段的构建工件复制到这个新阶段
-CMD ["./app"]
-```
+在Docker 17.05以上版本中，可以使用多阶段构建来减少所构建镜像的大小。
 
 ### 避免安装不必要的包
 
@@ -113,7 +99,7 @@ CMD ["./app"]
 建议在反斜杠符号\之前添加一个空格，可以增加可读性。  
 下面是来自`buildpack-dep`镜像的例子：
 
-```bash
+```dockerFile
 RUN apt-get update && apt-get install -y \
   bzr \
   cvs \
@@ -153,7 +139,7 @@ RUN apt-get update && apt-get install -y \
 
 总是在同一个RUN语句中结合运行apt-get update和apt-get install。例如:
 
-```bash
+```dockerFile
 RUN apt-get update && apt-get install -y \
     package-bar \
     package-baz \
@@ -163,7 +149,7 @@ RUN apt-get update && apt-get install -y \
 
 将`apt-get update`放在一条单独的`RUN`声明中会导致缓存问题，然后后续的`apt-get install`失败。比如，假设你有一个Dockerfile文件：
 
-```bash
+```dockerFile
 FROM ubuntu:18.04
 RUN apt-get update
 RUN apt-get install -y curl
@@ -173,7 +159,7 @@ RUN apt-get install -y curl
 docker发现修改后的`RUN apt-get update`指令和之前的完全一样。所以，`apt-get update`不会执行，而是使用之前的缓存镜像。因为`apt-get update`没有运行，后面的`apt-get install`可能安装的是过时的`curl`和`nginx`版本。  
 使用`RUN apt-get update && apt-get install -y`可以确保你的Dockerfiles每次安装的都是包的最新的版本，而且这个过程不需要进一步的编码或人工干预。这项技术叫作cache busting(缓存破坏)。你也可以通过显式地指定一个包的版本号来达到缓存破坏，这就是所谓的固定版本，例如：
 
-```bash
+```dockerFile
  RUN apt-get update && apt-get install -y \
    package-bar \
    package-baz \
@@ -183,7 +169,7 @@ docker发现修改后的`RUN apt-get update`指令和之前的完全一样。所
 固定版本会迫使构建过程检索特定的版本，而不管缓存中有什么。这项技术也可以减少因所需包中未预料到的变化而导致的失败。  
 下面是一个RUN指令的示例模板，展示了所有关于`apt-get`的建议。
 
-```bash
+```dockerFile
  RUN apt-get update && apt-get install -y \
    aufs-tools \
    automake \
@@ -208,7 +194,7 @@ docker发现修改后的`RUN apt-get update`指令和之前的完全一样。所
 
 一些RUN命令依赖于使用管道字符(`|`)将一个命令的输出管道到另一个命令的能力，如下面的示例所示:
 
-```bash
+```dockerFile
 RUN wget -O - https://some.site | wc -l > /number
 ```
 
@@ -216,14 +202,14 @@ Docker使用`/bin/sh -c`解释器执行这些命令，它只计算管道中最�
 在上面的示例中，只要`wc -l`命令成功(即使`wget`命令失败)，这个构建步骤就会成功并生成一个新的映像。  
 如果您希望命令因管道中的任何阶段的错误而失败，在前面添加`set -o pipefail &&`。例如:
 
-```bash
+```dockerFile
 RUN set -o pipefail && wget -O - https://some.site | wc -l > /number
 ```
 
 > 并不是所有的shell都支持-o pipefail选项。
 在诸如基于debian的镜像上的`dash shell`这样的情况下，可以考虑使用`RUN`的`exec`形式来显式地选择一个确实支持`pipefail`选项的`shell`。例如:
 
-```bash
+```dockerFile
 RUN ["/bin/bash", "-c", "set -o pipefail && wget -O - https://some.site | wc -l > /number"]
 ```
 
@@ -248,7 +234,7 @@ EXPOSE指令用于指定容器将要监听的端口。因此，你应该为你�
 `ENV`指令也可用于为你想要容器化的服务提供必要的环境变量，比如Postgres需要的`PGDATA`。  
 最后，ENV也能用于设置常见的版本号，比如下面的示例：
 
-```bash
+```dockerFile
 ENV PG_MAJOR 9.3
 ENV PG_VERSION 9.3.4
 RUN curl -SL http://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgress && …ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH
@@ -264,7 +250,7 @@ RUN curl -SL http://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/
 虽然`ADD`和`COPY`功能类似，但一般优先使用`COPY`，因为它更透明。`COPY`只支持简单将本地文件拷贝到容器中，而`ADD`有一些并不明显的功能（比如本地tar提取和远程URL支持）。因此，`ADD`的最佳用例是将本地tar文件自动提取到镜像中，例如`ADD rootfs.tar.xz`。  
 如果你的Dockerfile有多个步骤需要使用上下文中不同的文件,单独`COPY`每个文件，而不是一次性的`COPY`所有文件，这将保证每个步骤的构建缓存只在特定的文件变化时失效。例如：
 
-```bash
+```dockerFile
 COPY requirements.txt /tmp/
 RUN pip install --requirement /tmp/requirements.txt
 COPY . /tmp/
@@ -274,7 +260,7 @@ COPY . /tmp/
 
 为了让镜像尽量小，最好不要使用`ADD`指令从远程`URL`获取包，而是使用`curl`和`wget`。这样可以在文件提取完之后删除不再需要的文件,避免了在镜像中额外添加一层。比如尽量避免下面的用法：
 
-```bash
+```dockerFile
 ADD http://example.com/big.tar.xz /usr/src/things/
 RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things
 RUN make -C /usr/src/things all
@@ -282,7 +268,7 @@ RUN make -C /usr/src/things all
 
 而是应该使用下面这种方法：
 
-```bash
+```dockerFile
 RUN mkdir -p /usr/src/things \
    && curl -SL http://example.com/big.tar.xz \
    | tar -xJC /usr/src/things \
@@ -297,7 +283,7 @@ RUN mkdir -p /usr/src/things \
 
 例如，下面的示例镜像提供了命令行工具`s3cmd`：
 
-```bash
+```dockerFile
 ENTRYPOINT ["s3cmd"] 
 CMD ["--help"]
  ```
@@ -339,7 +325,7 @@ exec "$@"
 
 该辅助脚本被拷贝到容器，并在容器启动时通过`ENTRYPOINT`执行：
 
-```bash
+```dockerFile
 COPY ./docker-entrypoint.sh / 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["postgres"]
