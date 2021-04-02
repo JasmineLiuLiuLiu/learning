@@ -7,9 +7,9 @@ oAuth协议为用户资源的授权提供了一个安全的、开放而又简易
 ## 角色
 
 * Resource Owner：资源所有者，可以对保护的资源进行授权。如果资源所有者是一个人，他就是终端用户。
-* Resource server：资源服务器，持有受保护的资源，可以接收和回复对受保护资源带access tokens的请求。它与认证服务器，可以是同一台服务器，也可以是不同的服务器。
-* client：客户，一个代表资源所有者并且获得其授权的应用程序，它发出对资源的请求。
-* Authorization server：认证服务器，即服务提供商专门用来处理认证的服务器。它在成功验证了资源所有者并且获得授权后，给client签发access token。
+* Resource Server：资源服务器，持有受保护的资源，可以接收和回复对受保护资源带access tokens的请求。它与认证服务器，可以是同一台服务器，也可以是不同的服务器。
+* Client：客户，一个代表资源所有者并且获得其授权的应用程序，它发出对资源的请求。
+* Authorization Server：认证服务器，即服务提供商专门用来处理认证的服务器。它在成功验证了资源所有者并且获得授权后，给client签发access token。
 
 ![OAuth2-Callflow](./images/OAuth2-Callflow.png "OAuth2-Callflow")
 

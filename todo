@@ -2,3 +2,21 @@
 ThreadLoal 内存泄漏问题
 
 CompletionService vs FutureTask 阻塞问题
+
+什么是聚集索引，什么是非聚集索引？回表是什么意思？Spring JPA如何防止回表？
+
+内存行对齐？
+
+mysql bin log redo undo
+
+一致性hash
+
+dockerFile 最佳实践
+
+https对称非对称加密流程
+
+算法
+
+零拷贝
+
+
