@@ -75,6 +75,20 @@ EOF
 
 在Docker 17.05以上版本中，你可以使用多阶段构建来减少所构建镜像的大小。
 
+```bash
+FROM golang:1.7.3
+WORKDIR /go/src/github.com/alexellis/href-counter/
+RUN go get -d -v golang.org/x/net/html  
+COPY app.go .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+
+FROM alpine:latest  
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=0 /go/src/github.com/alexellis/href-counter/app . # COPY --from=0将前一阶段的构建工件复制到这个新阶段
+CMD ["./app"]
+```
+
 ### 避免安装不必要的包
 
 为了降低复杂性，减少依赖，减小文件大小和构建时间，应该避免安装额外的或者不必要的软件包。例如，不要在数据库镜像中包含一个文本编辑器。
