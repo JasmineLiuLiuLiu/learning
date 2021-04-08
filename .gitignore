@@ -1,2 +1,6 @@
 projects_summary/
 todo
+*.hprof
+samples/build
+samples/gradle
+samples/.gradle

@@ -1,5 +1,5 @@
 package org.jasmineliuliuliu.learning.basic;
-public class StringTests {
+public class CompareForTheSameStringTests {
 
   public static void main(String[] args) {
 

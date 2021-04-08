@@ -1,5 +1,4 @@
 
-ThreadLoal 内存泄漏问题
 
 CompletionService vs FutureTask 阻塞问题
 
@@ -18,5 +17,10 @@ https对称非对称加密流程
 算法
 
 零拷贝
+
+
+ git filter-branch --tree-filter 'rm -rf samples/java_pid128.hprof' HEAD
+
+ 工厂模式、单例模式、建造者模式、装饰器模式、模板方法模式、观察者模式、代理模式
 
 
