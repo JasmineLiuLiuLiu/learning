@@ -2,8 +2,20 @@ org/jasmineliuliuliu/learning/multithreads/CountDownLatchTest.java
  org.jasmineliuliuliu.learning.multithreads.CountDownLatchTest
  org.jasmineliuliuliu.learning.multithreads.CountDownLatchTest$CountDownThread
  org.jasmineliuliuliu.learning.multithreads.CountDownLatchTest$WaitThread
-org/jasmineliuliuliu/learning/uitls/Utils.java
- org.jasmineliuliuliu.learning.uitls.Utils
+org/jasmineliuliuliu/learning/multithreads/SemaphoreTest.java
+ org.jasmineliuliuliu.learning.multithreads.SemaphoreTest
+ org.jasmineliuliuliu.learning.multithreads.SemaphoreTest$MyThread
+org/jasmineliuliuliu/learning/multithreads/ThreadLocalTest.java
+ org.jasmineliuliuliu.learning.multithreads.ThreadLocalTest
+ org.jasmineliuliuliu.learning.multithreads.ThreadLocalTest$1
 org/jasmineliuliuliu/learning/multithreads/CyclicBarrierTest.java
  org.jasmineliuliuliu.learning.multithreads.CyclicBarrierTest
  org.jasmineliuliuliu.learning.multithreads.CyclicBarrierTest$WorkThread
+org/jasmineliuliuliu/learning/test/ReverseString.java
+ org.jasmineliuliuliu.learning.test.ReverseString
+org/jasmineliuliuliu/learning/basic/StringTests.java
+ org.jasmineliuliuliu.learning.basic.StringTests
+org/jasmineliuliuliu/learning/uitls/Utils.java
+ org.jasmineliuliuliu.learning.uitls.Utils
+org/jasmineliuliuliu/learning/basic/StringLengthTest.java
+ org.jasmineliuliuliu.learning.basic.StringLengthTest
