@@ -2,17 +2,10 @@
 
 CompletionService vs FutureTask 阻塞问题
 
-什么是聚集索引，什么是非聚集索引？回表是什么意思？Spring JPA如何防止回表？
-
-内存行对齐？
-
-mysql bin log redo undo
 
 一致性hash
 
-dockerFile 最佳实践
 
-https对称非对称加密流程
 
 算法
 
@@ -22,5 +15,20 @@ https对称非对称加密流程
  git filter-branch --tree-filter 'rm -rf samples/java_pid128.hprof' HEAD
 
  工厂模式、单例模式、建造者模式、装饰器模式、模板方法模式、观察者模式、代理模式
+
+ nginx如何保证长连接？
+ 客户端长连接 keepalive_timeout,keepalive_requests
+ 服务端长连接：upstream keepalive 300 表示连接池最大空闲连接数量
+ location里面 proxy_http_version 1.1, proxy_set_header Connection: ""（默认no）
+
+
+ 数据库分库分表
+
+ 优先队列？
+
+ 服务注册和发现
+
+ 如何防止微服务雪崩式崩塌
+
 
 

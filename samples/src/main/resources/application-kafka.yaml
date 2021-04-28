@@ -1,0 +1,56 @@
+spring.application.name: kafka-streams-message
+spring.cloud.stream.function.destination: ask;answer
+
+# spring.cloud.stream.***.binder makes Spring Cloud Stream connect to middle ware flexibly
+spring.cloud.stream:
+  kafka.binder:
+    required-acks: 1
+    min-partition-count: 3
+    replication-factor: 3
+    auto-create-topics: true
+    auto-add-partitions: true
+    brokers: 10.182.172.70:9092,10.182.172.70:9093,10.182.172.70:9094
+  kafka.bindings:
+    answer-in-0: # binding name
+      consumer:
+        auto-commit-offset: true
+        reset-offsets: false
+        start-offset: latest
+        batch-mode: true
+        max.poll.records: 2
+    ask-out-0: # binding name
+      producer:
+        sync: false
+  # spring.cloud.stream.bindings
+  # Binding properties are supplied by using the format of
+  # spring.cloud.stream.bindings.<bindingName>.<property>=<value>.
+  bindings:
+    answer-in-0: # input channel name
+      destination: jasmine
+      group: default
+      content-type: application/json
+    ask-out-0: # output channel name
+      destination: jasmine
+      group: default
+  poller:
+    fixed-delay: 100
+
+jasmine.customized.messages:
+  1:
+    q: "What is you name?"
+    a: "Jasmine."
+  2:
+    q: "How old are you?"
+    a: "It's a secret."
+  3:
+    q: "Do you like playing basketball?"
+    a: "No, I don't."
+  4:
+    q: "Do you like play badminton?"
+    a: "Yes, I do."
+  5:
+    q: "How are you?"
+    a: "Good."
+  6:
+    q: "How many pets do you have?"
+    a: "Zero."
