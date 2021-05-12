@@ -1,4 +1,5 @@
 package org.jasmineliuliuliu.learning.basic;
+
 public class CompareForTheSameStringTests {
 
   public static void main(String[] args) {
@@ -10,7 +11,6 @@ public class CompareForTheSameStringTests {
     String b1 = new String("bbb");
     String b2 = new String("bbb");
     System.out.println("test 2: " + (b1 == b2)); //false
-
 
     String c1 = "cccCCC";
     String c2 = "ccc" + "CCC";
@@ -56,6 +56,14 @@ public class CompareForTheSameStringTests {
     final String l2 = getL2();
     String l3 = "l" + l2;
     System.out.println("test 12: " + (l3 == l1)); //false
+
+    String m1 = "Jo";
+    String m2 = m1 + "hn";
+    System.out.println("test 13: " + (m2.intern() == m2)); //true
+
+    String n1 = "ja";
+    String n2 = n1 + "va";
+    System.out.println("test 14: " + (n2.intern() == n2)); //false
 
   }
 
